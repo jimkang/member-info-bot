@@ -59,6 +59,24 @@ var testCases = [
     },
     expected: 'The Ramones is a ensemble, fronted by lead singer Wesley Ramones.'
   },
+  {
+    name: 'TV show 3',
+    opts: {
+      entityName: 'Star Trek: The Next Generation',
+      entityType: 'tvShow',
+      probable: createProbable({random: seedrandom('TV Show 3')})
+    },
+    expected: 'Star Trek: The Next Generation is a television show, featuring the everyday misadventures of Jordyn Generation.'
+  },
+  {
+    name: 'Band with not-real words',
+    opts: {
+      entityName: 'Lymbyc Systym',
+      entityType: 'musicGroup',
+      probable: createProbable({random: seedrandom('Band with not-real words')})
+    },
+    expected: 'Lymbyc Systym is a ensemble, lead by lead singer Logan Lymbyc.'
+  }
 ];
 
 testCases.forEach(runTest);

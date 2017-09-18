@@ -67,7 +67,7 @@ function getMemberFact({entityName, entityType, probable}, done) {
   nounfinder.getNounsFromText(entityName, sb(makeFact, done));
 
   function makeFact(nouns) {
-    console.log('nouns', nouns)
+    // console.log('nouns', nouns)
     var nameBase;
 
     if (!nouns || nouns.length < 1) {
