@@ -39,7 +39,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 2')})
     },
-    expected: 'Migos is a ensemble, lead by main songwriter Doe Migos.'
+    expected: 'Migos is a ensemble, lead by composer Doe Migos.'
   },
   {
     name: 'Band 3',
@@ -75,7 +75,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band with not-real words')})
     },
-    expected: 'Lymbyc Systym is a ensemble, lead by lead singer Jackelyn Lymbyc.'
+    expected: 'Lymbyc Systym is a ensemble, lead by singer Jackelyn Lymbyc.'
   },
   {
     name: 'Band with The',
@@ -84,7 +84,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('The Notorious B.I.G.')})
     },
-    expected: 'The Notorious B.I.G. is a band, formed by MC Scott Notorious.'
+    expected: 'The Notorious B.I.G. is a band, formed by DJ Scott Notorious.'
   }
 ];
 

@@ -34,8 +34,8 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [2, 'composer'],
     [3, 'main songwriter'],
     [8, 'lead vocalist'],
-    [4, 'DJ'],
-    [5, 'MC']
+    [3, 'DJ'],
+    [1, 'MC']
   ]);
 
   var showSynonymTable = probable.createTableFromSizes([
