@@ -66,7 +66,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   var optionalCharDescTable = probable.createTableFromSizes([
     [10, ''],
     [5, 'main character '],
-    [2, 'the irrespressible '],
+    [2, 'the irrepressible '],
     [3, 'protagonist ']
   ]);
 
@@ -130,9 +130,9 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
       name = probable.pickFromArray(firstNames);
     }
     
-    if (probable.roll(8) === 0) {
-      name += ' ' + probable.pickFromArray(firstNames);
-    }
+    // if (probable.roll(8) === 0) {
+    //   name += ' ' + probable.pickFromArray(firstNames);
+    // }
     name += ' ' + base;
     return titleCase(name);
   }
