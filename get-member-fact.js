@@ -3,6 +3,7 @@ var callNextTick = require('call-next-tick');
 var Nounfinder = require('nounfinder');
 var firstNames = require('./first-names');
 var commonFirstNames = require('./common-first-names');
+var extraFirstNames = require('./data/additional-first-names');
 var titleCase = require('titlecase');
 var splitToWords = require('split-to-words');
 var waterfall = require('async-waterfall');
@@ -58,7 +59,6 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [2, 'centered around'],
     [2, 'showcasing'],
     [4, 'about'],
-    [5, 'which tells the story of'],
     [2, 'chronicling']
   ]);
 
@@ -68,7 +68,8 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [1, 'the celebrated life of'],
     [3, 'the everyday misadventures of'],
     [1, 'the escapades of'],
-    [1, 'the foibles of']
+    [1, 'the foibles of'],
+    [5, 'the story of'],    
   ]);
 
   var optionalCharDescTable = probable.createTableFromSizes([
@@ -133,6 +134,9 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     var name;
     if (probable.roll(3) === 0) {
       name = probable.pickFromArray(commonFirstNames);
+    }
+    else if (probable.roll(100) === 0) {
+      name = probable.pickFromArray(extraFirstNames);
     }
     else {
       name = probable.pickFromArray(firstNames);

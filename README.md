@@ -20,6 +20,13 @@ Then, create a `config/config.js` file in the project root that contains [Twitte
       wordnikAPIKey: 'mkomniojnnuibiybvuytvutrctrxezewarewetxyfcftvuhbg'
     };
 
+Name sources:
+
+- https://github.com/dominictarr/random-name/blob/master/first-names.json
+- https://www.ssa.gov/oact/babynames/decades/century.html
+- https://github.com/dariusk/corpora/master/data/humans/firstNames.json
+- https://deron.meranda.us/data/nicknames.txt
+
 Tests
 ---
 

@@ -21,7 +21,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV show')})
     },
-    expected: 'Adventure Time is a television show, which tells the story of the everyday misadventures of the irrepressible Keith Adventure.'
+    expected: 'Adventure Time is a television show, about the story of the irrepressible Keith Adventure.'
   },
   {
     name: 'TV show 2',
@@ -30,7 +30,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV show 2')})
     },
-    expected: 'Quantum Leap is a television series, about the life of protagonist Kevin Quantum.'
+    expected: 'Quantum Leap is a television series, showcasing the life of protagonist Kevin Quantum.'
   },
   {
     name: 'Band 2',
@@ -39,7 +39,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 2')})
     },
-    expected: 'Migos is a ensemble, lead by composer Doe Migos.'
+    expected: 'Migos is a musical group, created by DJ Terrie Migos.'
   },
   {
     name: 'Band 3',
@@ -57,7 +57,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 4')})
     },
-    expected: 'The Ramones is a ensemble, fronted by lead singer Jaclin Ramones.'
+    expected: 'The Ramones is a musical group, lead by lead guitarist Winna Ramones.'
   },
   {
     name: 'TV show 3',
@@ -66,7 +66,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV Show 3')})
     },
-    expected: 'Star Trek: The Next Generation is a television show, centered around the escapades of Charmine Generation.'
+    expected: 'Star Trek: The Next Generation is a television series, chronicling the life of protagonist Kali Generation.'
   },
   {
     name: 'Band with not-real words',
@@ -75,7 +75,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band with not-real words')})
     },
-    expected: 'Lymbyc Systym is a ensemble, lead by singer Jackelyn Lymbyc.'
+    expected: 'Lymbyc Systym is a musical group, lead by singer Val Lymbyc.'
   },
   {
     name: 'Band with The',
@@ -93,7 +93,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('h')})
     },
-    expected: 'The Carmichael Show is a television series, about the celebrated life of protagonist Helen Carmichael.'
+    expected: 'The Carmichael Show is a television series, showcasing the everyday misadventures of protagonist Helen Carmichael.'
   }
 ];
 
