@@ -1,12 +1,25 @@
-/* global process, __dirname */
+/* global process */
 
 // node strip-out-names-with-first-names.js input.json > new.json
 
 var fs = require('fs');
 var splitToWords = require('split-to-words');
+var uniq = require('lodash.uniq');
+
 var firstNames = require('../first-names').map(name => name.toLowerCase());
 var commonFirstNames = require('../common-first-names').map(name => name.toLowerCase());
-firstNames = commonFirstNames.concat(firstNames);
+var corporaFirstNames = require('../data/corpora-first-names.json').map(name => name.toLowerCase());
+var additionalFirstNames = require('../data/additional-first-names.json').map(name => name.toLowerCase());
+var nicknames = require('../data/nicknames.json').map(name => name.toLowerCase());
+
+firstNames = uniq(
+  commonFirstNames
+    .concat(firstNames)
+    .concat(commonFirstNames)
+    .concat(corporaFirstNames)
+    .concat(nicknames)
+    .concat(additionalFirstNames)
+);
 
 var doNotCountAsFirstNames = [
   'star',
@@ -20,7 +33,8 @@ var doNotCountAsFirstNames = [
   'de',
   'happy',
   'atlanta',
-  'bliss'
+  'bliss',
+  'summer'
 ];
 
 var names = JSON.parse(fs.readFileSync(process.argv[2]));
