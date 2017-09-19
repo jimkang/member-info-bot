@@ -1,10 +1,13 @@
 /* global process */
 
 var config = require('./config');
-var callNextTick = require('call-next-tick');
 var Twit = require('twit');
-var getWordDefinitionPhrase = require('./get-word-definition-phrase');
-var waterfall = require('async').waterfall;
+var getMemberFact = require('./get-member-fact');
+var sb = require('standard-bail')();
+var probable = require('probable');
+var callNextTick = require('call-next-tick');
+var popularArtists = require('./data/popular-artists-without-first-names.json');
+var tvShows = require('./data/shownames-without-first-names.json');
 
 var dryRun = false;
 if (process.argv.length > 2) {
@@ -19,13 +22,19 @@ var twit = new Twit(config.twitter);
 function run() {
   tries += 1;
 
-  waterfall(
-    [
-      getWordDefinitionPhrase,
-      postTweet,
-    ],
-    wrapUp
-  );
+  var getMemberFactOpts = {
+    probable: probable
+  };
+  if (probable.roll(2) === 0) {
+    getMemberFactOpts.entityName = probable.pickFromArray(popularArtists);
+    getMemberFactOpts.entityType = 'musicGroup';
+  }
+  else {
+    getMemberFactOpts.entityName = probable.pickFromArray(tvShows);
+    getMemberFactOpts.entityType = 'tvShow';
+  }
+
+  getMemberFact(getMemberFactOpts, sb(postTweet, wrapUp));
 }
 
 function postTweet(text, done) {

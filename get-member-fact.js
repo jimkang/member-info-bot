@@ -1,17 +1,20 @@
-
 var config = require('./config');
 var callNextTick = require('call-next-tick');
 var Nounfinder = require('nounfinder');
 var firstNames = require('./first-names');
+var commonFirstNames = require('./common-first-names');
 var titleCase = require('titlecase');
-var sb = require('standard-bail')();
 var splitToWords = require('split-to-words');
+var waterfall = require('async-waterfall');
+var curry = require('lodash.curry');
+
+const maxNounCommonnness = 150;
 
 var nounfinder = Nounfinder({
   wordnikAPIKey: config.wordnikAPIKey
 });
 
-function getMemberFact({entityName, entityType, probable}, done) {
+function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   var groupTable = probable.createTableFromSizes([
     [3, 'band'],
     [10, 'musical group'],
@@ -46,15 +49,18 @@ function getMemberFact({entityName, entityType, probable}, done) {
     [5, 'featuring'],
     [2, 'centered around'],
     [2, 'showcasing'],
-    [4, 'about']
+    [4, 'about'],
+    [5, 'which tells the story of'],
+    [2, 'chronicling']
   ]);
 
   var chroniclesTable = probable.createTableFromSizes([
     [3, 'the adventures of'],
-    [2, 'the chronicles of'],
     [5, 'the life of'],
+    [1, 'the celebrated life of'],
     [3, 'the everyday misadventures of'],
-    [1, 'the escapades of']
+    [1, 'the escapades of'],
+    [1, 'the foibles of']
   ]);
 
   var optionalCharDescTable = probable.createTableFromSizes([
@@ -64,22 +70,49 @@ function getMemberFact({entityName, entityType, probable}, done) {
     [3, 'protagonist ']
   ]);
 
-  nounfinder.getNounsFromText(entityName, sb(makeFact, done));
+  var originalNouns;
 
-  function makeFact(nouns) {
-    // console.log('nouns', nouns)
-    var nameBase;
+  waterfall(
+    [
+      curry(nounfinder.getNounsFromText)(entityName),
+      filterNounsByFrequency,
+      pickFromFiltered,
+      makeFact
+    ],
+    getMemberFactDone
+  );
 
-    if (!nouns || nouns.length < 1) {
-      nameBase = probable.pickFromArray(splitToWords(entityName));
-    }
-    else if (nouns.length === 1) {
-      nameBase = nouns[0];
+  function filterNounsByFrequency(nouns, done) {
+    originalNouns = nouns;
+    nounfinder.filterNounsForInterestingness(nouns, maxNounCommonnness, done);
+  }
+
+  function pickFromFiltered(filteredNouns, done) {
+    var picked;
+    var choices;
+
+    if (!filteredNouns || filteredNouns.length < 1) {
+      console.log('Filtered ALL nouns from text.');
+      choices = originalNouns;
     }
     else {
-      nameBase = probable.pickFromArray(nouns);
+      choices = filteredNouns;
     }
 
+    if (!choices || choices.length < 1) {
+      picked = probable.pickFromArray(splitToWords(entityName));
+    }
+    else if (choices.length === 1) {
+      picked = choices[0];
+    }
+    else {
+      picked = probable.pickFromArray(choices);
+    }          
+
+    done(null, picked);
+  }
+
+  function makeFact(nameBase, done) {
     var assembleBlurb = assembleMusicGroupBlurb;
     if (entityType === 'tvShow') {
       assembleBlurb = assembleTVShowBlurb;
@@ -89,7 +122,14 @@ function getMemberFact({entityName, entityType, probable}, done) {
   }
 
   function assembleMemberName(base) {
-    var name = probable.pickFromArray(firstNames);
+    var name;
+    if (probable.roll(3) === 0) {
+      name = probable.pickFromArray(commonFirstNames);
+    }
+    else {
+      name = probable.pickFromArray(firstNames);
+    }
+    
     if (probable.roll(8) === 0) {
       name += ' ' + probable.pickFromArray(firstNames);
     }

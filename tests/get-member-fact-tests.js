@@ -12,7 +12,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band')})
     },
-    expected: 'Slayer is a band, fronted by lead vocalist Brian Slayer.'
+    expected: 'Slayer is a musical group, founded by lead guitarist Kenneth Pearline Slayer.'
   },
   {
     name: 'TV show',
@@ -21,7 +21,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV show')})
     },
-    expected: 'Adventure Time is a TV show, about the everyday misadventures of Liliana Adventure.'
+    expected: 'Adventure Time is a TV show, which tells the story of the everyday misadventures of Keith Adventure.'
   },
   {
     name: 'TV show 2',
@@ -30,7 +30,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV show 2')})
     },
-    expected: 'Quantum Leap is a television series, showcasing the chronicles of protagonist Brody Quantum.'
+    expected: 'Quantum Leap is a television show, centered around the foibles of protagonist Kevin Quantum.'
   },
   {
     name: 'Band 2',
@@ -39,7 +39,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 2')})
     },
-    expected: 'Migos is a ensemble, lead by main songwriter Oliver Migos.'
+    expected: 'Migos is a musical group, created by MC Doe Migos.'
   },
   {
     name: 'Band 3',
@@ -48,7 +48,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 3')})
     },
-    expected: 'The Shins is a musical group, lead by lead guitarist Catherine Wyatt Shin.'
+    expected: 'The Shins is a musical group, lead by lead guitarist Christopher Shin.'
   },
   {
     name: 'Band 4',
@@ -57,7 +57,7 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band 4')})
     },
-    expected: 'The Ramones is a ensemble, fronted by lead singer Wesley Ramones.'
+    expected: 'The Ramones is a musical group, lead by lead guitarist Jaclin Ramones.'
   },
   {
     name: 'TV show 3',
@@ -66,7 +66,7 @@ var testCases = [
       entityType: 'tvShow',
       probable: createProbable({random: seedrandom('TV Show 3')})
     },
-    expected: 'Star Trek: The Next Generation is a television show, featuring the everyday misadventures of Jordyn Generation.'
+    expected: 'Star Trek: The Next Generation is a television series, which tells the story of the life of protagonist Charmine Generation.'
   },
   {
     name: 'Band with not-real words',
@@ -75,7 +75,16 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('Band with not-real words')})
     },
-    expected: 'Lymbyc Systym is a ensemble, lead by lead singer Logan Lymbyc.'
+    expected: 'Lymbyc Systym is a musical group, lead by singer Jackelyn Lymbyc.'
+  },
+  {
+    name: 'Band with The',
+    opts: {
+      entityName: 'The Notorious B.I.G.',
+      entityType: 'musicGroup',
+      probable: createProbable({random: seedrandom('The Notorious B.I.G.')})
+    },
+    expected: 'The Notorious B.I.G. is a ensemble, formed by lead vocalist Scott Notorious.'
   }
 ];
 
