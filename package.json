@@ -25,16 +25,13 @@
   "dependencies": {
     "async-waterfall": "^0.1.5",
     "call-next-tick": "^1.1.2",
-    "canonicalizer": "^1.0.2",
     "lodash.curry": "^4.1.1",
-    "mastodon": "^1.2.0",
     "nounfinder": "^2.0.4",
     "probable": "^2.0.0",
     "seedrandom": "^2.4.3",
     "split-to-words": "^1.0.0",
     "standard-bail": "^2.0.1",
     "titlecase": "^1.1.2",
-    "twit": "^2.2.4",
-    "wordnok": "^3.3.1"
+    "twit": "^2.2.4"
   }
 }
