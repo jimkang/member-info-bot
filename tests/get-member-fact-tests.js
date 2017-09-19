@@ -84,7 +84,16 @@ var testCases = [
       entityType: 'musicGroup',
       probable: createProbable({random: seedrandom('The Notorious B.I.G.')})
     },
-    expected: 'The Notorious B.I.G. is a band, formed by DJ Scott Notorious.'
+    expected: 'The Notorious B.I.G. is a band, formed by DJ Scott B.I.G..'
+  },
+  {
+    name: 'Show with The. Should never pick "the".',
+    opts: {
+      entityName: 'The Carmichael Show',
+      entityType: 'tvShow',
+      probable: createProbable({random: seedrandom('h')})
+    },
+    expected: 'The Carmichael Show is a television series, about the celebrated life of protagonist Helen Carmichael.'
   }
 ];
 

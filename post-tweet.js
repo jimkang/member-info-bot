@@ -25,7 +25,7 @@ function run() {
   var getMemberFactOpts = {
     probable: probable
   };
-  if (probable.roll(2) === 0) {
+  if (probable.roll(3) === 0) {
     getMemberFactOpts.entityName = probable.pickFromArray(popularArtists);
     getMemberFactOpts.entityType = 'musicGroup';
   }

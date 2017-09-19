@@ -25,6 +25,7 @@
   "dependencies": {
     "async-waterfall": "^0.1.5",
     "call-next-tick": "^1.1.2",
+    "iscool": "^1.1.47",
     "lodash.curry": "^4.1.1",
     "nounfinder": "^2.0.4",
     "probable": "^2.0.0",

@@ -7,6 +7,14 @@ var titleCase = require('titlecase');
 var splitToWords = require('split-to-words');
 var waterfall = require('async-waterfall');
 var curry = require('lodash.curry');
+var iscool = require('iscool')({
+  customBlacklist: [
+    'the',
+    'a',
+    'an',
+    'to'
+  ]
+});
 
 const maxNounCommonnness = 150;
 
@@ -100,7 +108,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     }
 
     if (!choices || choices.length < 1) {
-      picked = probable.pickFromArray(splitToWords(entityName));
+      picked = probable.pickFromArray(splitToWords(entityName).filter(iscool));
     }
     else if (choices.length === 1) {
       picked = choices[0];
