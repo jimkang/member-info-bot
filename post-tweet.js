@@ -8,6 +8,28 @@ var probable = require('probable');
 var callNextTick = require('call-next-tick');
 var popularArtists = require('./data/popular-artists-without-first-names.json');
 var tvShows = require('./data/shownames-without-first-names.json');
+var appliances = require('./data/corpora-appliances.json');
+var objects = require('./data/corpora-objects.json');
+var clothes = require('./data/corpora-clothes.json');
+var corporations = require('./data/corpora-corporations.json');
+
+var kindOfThingTable = probable.createTableFromSizes([
+  [3, {entityType: 'musicGroup', entityNameSources: [popularArtists]}],
+  [10, {entityType: 'tvShow', entityNameSources: [tvShows]}],
+  [
+    9,
+    {
+      entityType: 'product',
+      entityNameSources: probable.createTableFromSizes([
+        [5, appliances], 
+        [3, objects],
+        [2, clothes]
+      ])
+      .roll
+    }
+  ],
+  [4, {entityType: 'corporation', entityNameSources: [corporations]}]
+]);
 
 var dryRun = false;
 if (process.argv.length > 2) {
@@ -21,18 +43,25 @@ var twit = new Twit(config.twitter);
 
 function run() {
   tries += 1;
+  var kindOfThing = kindOfThingTable.roll();
+  var entityNameSource = kindOfThing.entityNameSources;
+  var entityName;
 
-  var getMemberFactOpts = {
-    probable: probable
-  };
-  if (probable.roll(3) === 0) {
-    getMemberFactOpts.entityName = probable.pickFromArray(popularArtists);
-    getMemberFactOpts.entityType = 'musicGroup';
+  if (typeof entityNameSource === 'function') {
+    entityName = entityNameSource();
+  }
+  else if (Array.isArray(entityNameSource)) {
+    entityName = probable.pickFromArray(probable.pickFromArray(entityNameSource));
   }
   else {
-    getMemberFactOpts.entityName = probable.pickFromArray(tvShows);
-    getMemberFactOpts.entityType = 'tvShow';
+    throw new Error('Unusable entityNameSource type.');
   }
+
+  var getMemberFactOpts = {
+    probable: probable,
+    entityType: kindOfThing.entityType,
+    entityName
+  };
 
   getMemberFact(getMemberFactOpts, sb(postTweet, wrapUp));
 }

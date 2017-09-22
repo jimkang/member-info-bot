@@ -79,12 +79,43 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [3, 'protagonist ']
   ]);
 
+  var inventedTable = probable.createTableFromSizes([
+    [10, 'invented'],
+    [5, 'created'],
+    [1, 'dreamed up'],
+    [5, 'discovered']
+  ]);
+
+  var foundedTable = probable.createTableFromSizes([
+    [10, 'founded'],
+    [5, 'built from the ground up'],
+    [8, 'started']
+  ]);
+
+  var nameKindTable = probable.createTableFromSizes([
+    [1, extraFirstNames],
+    [79, commonFirstNames],
+    [20, firstNames] // A broad selection of first names.
+  ]);
+
+  var prefixTable = probable.createTableFromSizes([
+    [50, ''],
+    [20, 'Fact: '],
+    [5, 'Fact! '],
+    [15, 'Did you know? ']
+  ]);
+
+  var punctuationTable = probable.createTableFromSizes([
+    [50, '.'],
+    [40, '!']
+  ]);
+
   var originalNouns;
 
   waterfall(
     [
       curry(nounfinder.getNounsFromText)(entityName),
-      filterNounsByFrequency,
+      entityType === 'corporation' ? reduceToNonKnownNouns : filterNounsByFrequency,
       pickFromFiltered,
       makeFact
     ],
@@ -121,41 +152,64 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     done(null, picked);
   }
 
+  // For corporations, do not filter out non-known nouns.
+  // In fact, try to choose from those words that are not.
+  function reduceToNonKnownNouns(nouns, done) {
+    var choices;
+    var originalWords = splitToWords(entityName);
+    if (nouns.length > 0 && nouns.length < originalWords.length) {
+      choices = originalWords.reduce(addIfNotInNouns, []);
+    }
+    else {
+      choices = originalWords;
+    }
+    callNextTick(done, null, choices);
+
+    function addIfNotInNouns(goodList, word) {
+      if (nouns.indexOf(word.toLowerCase()) === -1) {
+        goodList.push(word);
+      }
+      return goodList;
+    }
+  }
+
   function makeFact(nameBase, done) {
     var assembleBlurb = assembleMusicGroupBlurb;
     if (entityType === 'tvShow') {
       assembleBlurb = assembleTVShowBlurb;
+    }
+    else if (entityType === 'product') {
+      assembleBlurb = assembleProductBlurb;
+    }
+    else if (entityType === 'corporation') {
+      assembleBlurb = assembleCorporationBlurb;
     }
     var blurb = assembleBlurb(entityName, assembleMemberName(nameBase));
     callNextTick(done, null, blurb);
   }
 
   function assembleMemberName(base) {
-    var name;
-    if (probable.roll(3) === 0) {
-      name = probable.pickFromArray(commonFirstNames);
-    }
-    else if (probable.roll(100) === 0) {
-      name = probable.pickFromArray(extraFirstNames);
-    }
-    else {
-      name = probable.pickFromArray(firstNames);
-    }
-    
-    // if (probable.roll(8) === 0) {
-    //   name += ' ' + probable.pickFromArray(firstNames);
-    // }
+    var name = nameKindTable.roll();
     name += ' ' + base;
     return titleCase(name);
   }
 
   function assembleMusicGroupBlurb(entity, memberName) {
-    return `${entity} is a ${groupTable.roll()}, ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${memberName}.`;
+    return `${prefixTable.roll()}${entity} is a ${groupTable.roll()}, ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${memberName}${punctuationTable.roll()}`;
   }
 
   function assembleTVShowBlurb(entity, memberName) {
-    return `${entity} is a ${showSynonymTable.roll()}, ${showLeadingWordTable.roll()} ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${memberName}.`;
+    return `${prefixTable.roll()}${entity} is a ${showSynonymTable.roll()}, ${showLeadingWordTable.roll()} ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${memberName}${punctuationTable.roll()}`;
   }
+
+  function assembleProductBlurb(entity, memberName) {
+    return `${prefixTable.roll()}The ${entity} was ${inventedTable.roll()} by ${memberName}${punctuationTable.roll()}`;
+  }
+
+  function assembleCorporationBlurb(entity, memberName) {
+    return `${prefixTable.roll()}${entity} was ${foundedTable.roll()} by ${memberName}${punctuationTable.roll()}`;
+  }
+
 }
 
 module.exports = getMemberFact;
