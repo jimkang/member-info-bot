@@ -30,7 +30,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [4, 'ensemble']
   ]);
   var bandLeadingVerbTable = probable.createTableFromSizes([
-    [10, 'lead'],
+    [10, 'led'],
     [3, 'founded'],
     [2, 'created'],
     [4, 'fronted'],
