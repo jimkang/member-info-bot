@@ -18,3 +18,6 @@ test:
 clean-up-artists:
 	rm -f data/popular-artists-without-first-names.json
 	node tools/strip-out-names-with-first-names.js raw-data/popular-artists.json > data/popular-artists-without-first-names.json
+
+prettier:
+	prettier --single-quote --write "**/*.js"

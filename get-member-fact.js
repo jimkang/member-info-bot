@@ -9,12 +9,7 @@ var splitToWords = require('split-to-words');
 var waterfall = require('async-waterfall');
 var curry = require('lodash.curry');
 var iscool = require('iscool')({
-  customBlacklist: [
-    'the',
-    'a',
-    'an',
-    'to'
-  ]
+  customBlacklist: ['the', 'a', 'an', 'to']
 });
 
 const maxNounCommonnness = 150;
@@ -23,7 +18,10 @@ var nounfinder = Nounfinder({
   wordnikAPIKey: config.wordnikAPIKey
 });
 
-function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
+function getMemberFact(
+  { entityName, entityType, probable },
+  getMemberFactDone
+) {
   var groupTable = probable.createTableFromSizes([
     [3, 'band'],
     [10, 'musical group'],
@@ -66,7 +64,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [3, 'depicts the adventures of'],
     [3, 'depicts the misadventures of'],
     [5, 'is about the life of'],
-    [5, 'is the story of'],    
+    [5, 'is the story of']
   ]);
 
   var optionalCharDescTable = probable.createTableFromSizes([
@@ -109,17 +107,16 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [3, 'Did you know? ']
   ]);
 
-  var punctuationTable = probable.createTableFromSizes([
-    [50, '.'],
-    [40, '!']
-  ]);
+  var punctuationTable = probable.createTableFromSizes([[50, '.'], [40, '!']]);
 
   var originalNouns;
 
   waterfall(
     [
       curry(nounfinder.getNounsFromText)(entityName),
-      entityType === 'corporation' ? reduceToNonKnownNouns : filterNounsByFrequency,
+      entityType === 'corporation'
+        ? reduceToNonKnownNouns
+        : filterNounsByFrequency,
       pickFromFiltered,
       makeFact
     ],
@@ -138,20 +135,17 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     if (!filteredNouns || filteredNouns.length < 1) {
       console.log('Filtered ALL nouns from text.');
       choices = originalNouns;
-    }
-    else {
+    } else {
       choices = filteredNouns;
     }
 
     if (!choices || choices.length < 1) {
       picked = probable.pickFromArray(splitToWords(entityName).filter(iscool));
-    }
-    else if (choices.length === 1) {
+    } else if (choices.length === 1) {
       picked = choices[0];
-    }
-    else {
+    } else {
       picked = probable.pickFromArray(choices);
-    }          
+    }
 
     done(null, picked);
   }
@@ -163,8 +157,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     var originalWords = splitToWords(entityName);
     if (nouns.length > 0 && nouns.length < originalWords.length) {
       choices = originalWords.reduce(addIfNotInNouns, []);
-    }
-    else {
+    } else {
       choices = originalWords;
     }
     callNextTick(done, null, choices);
@@ -182,18 +175,18 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     var assembleBlurb = assembleMusicGroupBlurb;
     if (entityType === 'tvShow') {
       assembleBlurb = assembleTVShowBlurb;
-    }
-    else if (entityType === 'product') {
+    } else if (entityType === 'product') {
       assembleBlurb = assembleProductBlurb;
-    }
-    else if (entityType === 'corporation') {
+    } else if (entityType === 'corporation') {
       assembleBlurb = assembleCorporationBlurb;
-    }
-    else if (entityType === 'game') {
+    } else if (entityType === 'game') {
       skipFirstName = probable.roll(2) === 0;
       assembleBlurb = assembleGameBlurb;
     }
-    var blurb = assembleBlurb(entityName, assembleMemberName(nameBase, skipFirstName));
+    var blurb = assembleBlurb(
+      entityName,
+      assembleMemberName(nameBase, skipFirstName)
+    );
     callNextTick(done, null, blurb);
   }
 
@@ -207,23 +200,39 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   }
 
   function assembleMusicGroupBlurb(entity, memberName) {
-    return `${prefixTable.roll()}${entity} is a ${groupTable.roll()} ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}${
+      entity
+    } is a ${groupTable.roll()} ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${
+      memberName
+    }${punctuationTable.roll()}`;
   }
 
   function assembleTVShowBlurb(entity, memberName) {
-    return `${prefixTable.roll()}${entity} is a ${showSynonymTable.roll()}. It ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}${
+      entity
+    } is a ${showSynonymTable.roll()}. It ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${
+      memberName
+    }${punctuationTable.roll()}`;
   }
 
   function assembleProductBlurb(entity, memberName) {
-    return `${prefixTable.roll()}The ${entity} was ${inventedTable.roll()} by ${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}The ${entity} was ${inventedTable.roll()} by ${
+      memberName
+    }${punctuationTable.roll()}`;
   }
 
   function assembleCorporationBlurb(entity, memberName) {
-    return `${prefixTable.roll()}${entity} was ${foundedTable.roll()} by ${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}${entity} was ${foundedTable.roll()} by ${
+      memberName
+    }${punctuationTable.roll()}`;
   }
 
   function assembleGameBlurb(entity, memberName) {
-    return `${prefixTable.roll()}In the video game ${entity}, ${gamePlayingPhraseTable.roll()} ${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}In the video game ${
+      entity
+    }, ${gamePlayingPhraseTable.roll()} ${
+      memberName
+    }${punctuationTable.roll()}`;
   }
 }
 

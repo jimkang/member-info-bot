@@ -15,27 +15,26 @@ var corporations = require('./data/corpora-corporations.json');
 var games = require('./data/games.json');
 
 var kindOfThingTable = probable.createTableFromSizes([
-  [3, {entityType: 'musicGroup', entityNameSources: [popularArtists]}],
-  [9, {entityType: 'tvShow', entityNameSources: [tvShows]}],
+  [3, { entityType: 'musicGroup', entityNameSources: [popularArtists] }],
+  [9, { entityType: 'tvShow', entityNameSources: [tvShows] }],
   [
     9,
     {
       entityType: 'product',
       entityNameSources: probable.createTableFromSizes([
-        [5, appliances], 
+        [5, appliances],
         [3, objects],
         [2, clothes]
-      ])
-      .roll
+      ]).roll
     }
   ],
-  [5, {entityType: 'corporation', entityNameSources: [corporations]}],
-  [6, {entityType: 'game', entityNameSources: [games]}]
+  [5, { entityType: 'corporation', entityNameSources: [corporations] }],
+  [6, { entityType: 'game', entityNameSources: [games] }]
 ]);
 
 var dryRun = false;
 if (process.argv.length > 2) {
-  dryRun = (process.argv[2].toLowerCase() == '--dry');
+  dryRun = process.argv[2].toLowerCase() == '--dry';
 }
 
 var tryLimit = 10;
@@ -51,11 +50,11 @@ function run() {
 
   if (typeof entityNameSource === 'function') {
     entityName = entityNameSource();
-  }
-  else if (Array.isArray(entityNameSource)) {
-    entityName = probable.pickFromArray(probable.pickFromArray(entityNameSource));
-  }
-  else {
+  } else if (Array.isArray(entityNameSource)) {
+    entityName = probable.pickFromArray(
+      probable.pickFromArray(entityNameSource)
+    );
+  } else {
     throw new Error('Unusable entityNameSource type.');
   }
 
@@ -72,8 +71,7 @@ function postTweet(text, done) {
   if (dryRun) {
     console.log('Would have tweeted:', text);
     callNextTick(done);
-  }
-  else {
+  } else {
     var body = {
       status: text
     };
@@ -92,8 +90,7 @@ function wrapUp(error, data) {
       // Try again.
       callNextTick(run);
     }
-  }
-  else {
+  } else {
     console.log('Completed.');
   }
 }

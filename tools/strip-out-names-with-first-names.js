@@ -7,10 +7,18 @@ var splitToWords = require('split-to-words');
 var uniq = require('lodash.uniq');
 
 var firstNames = require('../first-names').map(name => name.toLowerCase());
-var commonFirstNames = require('../common-first-names').map(name => name.toLowerCase());
-var corporaFirstNames = require('../data/corpora-first-names.json').map(name => name.toLowerCase());
-var additionalFirstNames = require('../data/additional-first-names.json').map(name => name.toLowerCase());
-var nicknames = require('../data/nicknames.json').map(name => name.toLowerCase());
+var commonFirstNames = require('../common-first-names').map(name =>
+  name.toLowerCase()
+);
+var corporaFirstNames = require('../data/corpora-first-names.json').map(name =>
+  name.toLowerCase()
+);
+var additionalFirstNames = require('../data/additional-first-names.json').map(
+  name => name.toLowerCase()
+);
+var nicknames = require('../data/nicknames.json').map(name =>
+  name.toLowerCase()
+);
 
 firstNames = uniq(
   commonFirstNames
@@ -48,12 +56,12 @@ function doesNotHaveAFirstName(name) {
 
   function wordIsNotAFirstName(word) {
     var lowerCaseWord = word.toLowerCase();
-    if (doNotCountAsFirstNames.indexOf(lowerCaseWord) !== -1 ||
-      firstNames.indexOf(lowerCaseWord) === -1) {
-
+    if (
+      doNotCountAsFirstNames.indexOf(lowerCaseWord) !== -1 ||
+      firstNames.indexOf(lowerCaseWord) === -1
+    ) {
       return true;
-    }
-    else {
+    } else {
       console.error(name, 'contains a first name!');
       return false;
     }

@@ -10,7 +10,7 @@ var testCases = [
     opts: {
       entityName: 'Legend of Zelda',
       entityType: 'game',
-      probable: createProbable({random: seedrandom('Game')})
+      probable: createProbable({ random: seedrandom('Game') })
     }
   },
   {
@@ -18,7 +18,7 @@ var testCases = [
     opts: {
       entityName: 'Ninja Gaiden',
       entityType: 'game',
-      probable: createProbable({random: seedrandom('Game')})
+      probable: createProbable({ random: seedrandom('Game') })
     }
   },
   {
@@ -26,7 +26,7 @@ var testCases = [
     opts: {
       entityName: 'Slayer',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('Band')})
+      probable: createProbable({ random: seedrandom('Band') })
     }
   },
   {
@@ -34,7 +34,7 @@ var testCases = [
     opts: {
       entityName: 'Adventure Time',
       entityType: 'tvShow',
-      probable: createProbable({random: seedrandom('TV show')})
+      probable: createProbable({ random: seedrandom('TV show') })
     }
   },
   {
@@ -42,7 +42,7 @@ var testCases = [
     opts: {
       entityName: 'Quantum Leap',
       entityType: 'tvShow',
-      probable: createProbable({random: seedrandom('TV show 2')})
+      probable: createProbable({ random: seedrandom('TV show 2') })
     }
   },
   {
@@ -50,7 +50,7 @@ var testCases = [
     opts: {
       entityName: 'Migos',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('Band 2')})
+      probable: createProbable({ random: seedrandom('Band 2') })
     }
   },
   {
@@ -58,7 +58,7 @@ var testCases = [
     opts: {
       entityName: 'The Shins',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('Band 3')})
+      probable: createProbable({ random: seedrandom('Band 3') })
     }
   },
   {
@@ -66,7 +66,7 @@ var testCases = [
     opts: {
       entityName: 'The Ramones',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('Band 4')})
+      probable: createProbable({ random: seedrandom('Band 4') })
     }
   },
   {
@@ -74,7 +74,7 @@ var testCases = [
     opts: {
       entityName: 'Star Trek: The Next Generation',
       entityType: 'tvShow',
-      probable: createProbable({random: seedrandom('TV Show 3')})
+      probable: createProbable({ random: seedrandom('TV Show 3') })
     }
   },
   {
@@ -82,7 +82,9 @@ var testCases = [
     opts: {
       entityName: 'Lymbyc Systym',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('Band with not-real words')})
+      probable: createProbable({
+        random: seedrandom('Band with not-real words')
+      })
     }
   },
   {
@@ -90,7 +92,7 @@ var testCases = [
     opts: {
       entityName: 'The Notorious B.I.G.',
       entityType: 'musicGroup',
-      probable: createProbable({random: seedrandom('The Notorious B.I.G.')})
+      probable: createProbable({ random: seedrandom('The Notorious B.I.G.') })
     }
   },
   {
@@ -98,7 +100,7 @@ var testCases = [
     opts: {
       entityName: 'The Carmichael Show',
       entityType: 'tvShow',
-      probable: createProbable({random: seedrandom('h')})
+      probable: createProbable({ random: seedrandom('h') })
     }
   },
   {
@@ -106,7 +108,7 @@ var testCases = [
     opts: {
       entityName: 'butane torch',
       entityType: 'product',
-      probable: createProbable({random: seedrandom('h')})
+      probable: createProbable({ random: seedrandom('h') })
     }
   },
   {
@@ -114,7 +116,7 @@ var testCases = [
     opts: {
       entityName: 'Akamai Technologies',
       entityType: 'corporation',
-      probable: createProbable({random: seedrandom('c3')})
+      probable: createProbable({ random: seedrandom('c3') })
     }
   }
 ];
@@ -130,7 +132,10 @@ function runTest(testCase) {
     function factCheck(error, fact) {
       assertNoError(t.ok, error, 'No error while getting fact.');
       console.log(fact);
-      t.ok(fact.length > 0, 'Fact is not empty. (Look at fact to make sure it is OK.)');
+      t.ok(
+        fact.length > 0,
+        'Fact is not empty. (Look at fact to make sure it is OK.)'
+      );
       t.end();
     }
   }
