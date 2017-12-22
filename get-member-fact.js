@@ -63,13 +63,10 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   ]);
 
   var chroniclesTable = probable.createTableFromSizes([
-    [3, 'the adventures of'],
-    [5, 'the life of'],
-    [1, 'the celebrated life of'],
-    [3, 'the everyday misadventures of'],
-    [1, 'the escapades of'],
-    [1, 'the foibles of'],
-    [5, 'the story of'],    
+    [3, 'depicts the adventures of'],
+    [3, 'depicts the misadventures of'],
+    [5, 'is about the life of'],
+    [5, 'is the story of'],    
   ]);
 
   var optionalCharDescTable = probable.createTableFromSizes([
@@ -92,6 +89,13 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     [8, 'started']
   ]);
 
+  var gamePlayingPhraseTable = probable.createTableFromSizes([
+    [1, 'you play as the hero,'],
+    [1, 'you play as the main guy,'],
+    [1, 'you are the brave'],
+    [1, 'you are the intrepid']
+  ]);
+
   var nameKindTable = probable.createTableFromSizes([
     [1, extraFirstNames],
     [79, commonFirstNames],
@@ -99,10 +103,10 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   ]);
 
   var prefixTable = probable.createTableFromSizes([
-    [50, ''],
-    [20, 'Fact: '],
-    [5, 'Fact! '],
-    [15, 'Did you know? ']
+    [90, ''],
+    [6, 'Fact: '],
+    [1, 'Fact! '],
+    [3, 'Did you know? ']
   ]);
 
   var punctuationTable = probable.createTableFromSizes([
@@ -174,6 +178,7 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
   }
 
   function makeFact(nameBase, done) {
+    var skipFirstName = false;
     var assembleBlurb = assembleMusicGroupBlurb;
     if (entityType === 'tvShow') {
       assembleBlurb = assembleTVShowBlurb;
@@ -184,22 +189,29 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     else if (entityType === 'corporation') {
       assembleBlurb = assembleCorporationBlurb;
     }
-    var blurb = assembleBlurb(entityName, assembleMemberName(nameBase));
+    else if (entityType === 'game') {
+      skipFirstName = probable.roll(2) === 0;
+      assembleBlurb = assembleGameBlurb;
+    }
+    var blurb = assembleBlurb(entityName, assembleMemberName(nameBase, skipFirstName));
     callNextTick(done, null, blurb);
   }
 
-  function assembleMemberName(base) {
-    var name = nameKindTable.roll();
-    name += ' ' + base;
+  function assembleMemberName(base, skipFirstName) {
+    var name = base;
+    if (!skipFirstName) {
+      name = nameKindTable.roll();
+      name += ' ' + base;
+    }
     return titleCase(name);
   }
 
   function assembleMusicGroupBlurb(entity, memberName) {
-    return `${prefixTable.roll()}${entity} is a ${groupTable.roll()}, ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}${entity} is a ${groupTable.roll()} ${bandLeadingVerbTable.roll()} by ${bandRoleTable.roll()} ${memberName}${punctuationTable.roll()}`;
   }
 
   function assembleTVShowBlurb(entity, memberName) {
-    return `${prefixTable.roll()}${entity} is a ${showSynonymTable.roll()}, ${showLeadingWordTable.roll()} ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${memberName}${punctuationTable.roll()}`;
+    return `${prefixTable.roll()}${entity} is a ${showSynonymTable.roll()}. It ${chroniclesTable.roll()} ${optionalCharDescTable.roll()}${memberName}${punctuationTable.roll()}`;
   }
 
   function assembleProductBlurb(entity, memberName) {
@@ -210,6 +222,9 @@ function getMemberFact({entityName, entityType, probable}, getMemberFactDone) {
     return `${prefixTable.roll()}${entity} was ${foundedTable.roll()} by ${memberName}${punctuationTable.roll()}`;
   }
 
+  function assembleGameBlurb(entity, memberName) {
+    return `${prefixTable.roll()}In the video game ${entity}, ${gamePlayingPhraseTable.roll()} ${memberName}${punctuationTable.roll()}`;
+  }
 }
 
 module.exports = getMemberFact;

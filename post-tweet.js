@@ -12,10 +12,11 @@ var appliances = require('./data/corpora-appliances.json');
 var objects = require('./data/corpora-objects.json');
 var clothes = require('./data/corpora-clothes.json');
 var corporations = require('./data/corpora-corporations.json');
+var games = require('./data/games.json');
 
 var kindOfThingTable = probable.createTableFromSizes([
   [3, {entityType: 'musicGroup', entityNameSources: [popularArtists]}],
-  [10, {entityType: 'tvShow', entityNameSources: [tvShows]}],
+  [9, {entityType: 'tvShow', entityNameSources: [tvShows]}],
   [
     9,
     {
@@ -28,7 +29,8 @@ var kindOfThingTable = probable.createTableFromSizes([
       .roll
     }
   ],
-  [4, {entityType: 'corporation', entityNameSources: [corporations]}]
+  [5, {entityType: 'corporation', entityNameSources: [corporations]}],
+  [6, {entityType: 'game', entityNameSources: [games]}]
 ]);
 
 var dryRun = false;

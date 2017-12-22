@@ -6,6 +6,22 @@ var seedrandom = require('seedrandom');
 
 var testCases = [
   {
+    name: 'Game',
+    opts: {
+      entityName: 'Legend of Zelda',
+      entityType: 'game',
+      probable: createProbable({random: seedrandom('Game')})
+    }
+  },
+  {
+    name: 'Game',
+    opts: {
+      entityName: 'Ninja Gaiden',
+      entityType: 'game',
+      probable: createProbable({random: seedrandom('Game')})
+    }
+  },
+  {
     name: 'Band',
     opts: {
       entityName: 'Slayer',
