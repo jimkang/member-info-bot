@@ -29,7 +29,7 @@ var kindOfThingTable = probable.createTableFromSizes([
     }
   ],
   [5, { entityType: 'corporation', entityNameSources: [corporations] }],
-  [6, { entityType: 'game', entityNameSources: [games] }]
+  [9, { entityType: 'game', entityNameSources: [games] }]
 ]);
 
 var dryRun = false;
