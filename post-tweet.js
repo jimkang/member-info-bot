@@ -13,6 +13,23 @@ var objects = require('./data/corpora-objects.json');
 var clothes = require('./data/corpora-clothes.json');
 var corporations = require('./data/corpora-corporations.json');
 var games = require('./data/games.json');
+var StaticWebArchiveOnGit = require('static-web-archive-on-git');
+var queue = require('d3-queue').queue;
+var randomId = require('idmaker').randomId;
+
+var staticWebStream = StaticWebArchiveOnGit({
+  config: config.github,
+  title: '@memberfacts archives',
+  footerScript: `<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49491163-1', 'jimkang.com');
+  ga('send', 'pageview');
+</script>`,
+  maxEntriesPerPage: 50
+});
 
 var kindOfThingTable = probable.createTableFromSizes([
   [3, { entityType: 'musicGroup', entityNameSources: [popularArtists] }],
@@ -64,7 +81,14 @@ function run() {
     entityName
   };
 
-  getMemberFact(getMemberFactOpts, sb(postTweet, wrapUp));
+  getMemberFact(getMemberFactOpts, sb(postToTargets, wrapUp));
+}
+
+function postToTargets(text, done) {
+  var q = queue();
+  q.defer(postTweet, text);
+  q.defer(postToArchive, text);
+  q.await(done);
 }
 
 function postTweet(text, done) {
@@ -77,6 +101,16 @@ function postTweet(text, done) {
     };
     twit.post('statuses/update', body, done);
   }
+}
+
+function postToArchive(text, done) {
+  var id = 'fact-' + randomId(8);
+  staticWebStream.write({
+    id,
+    date: new Date().toISOString(),
+    caption: text
+  });
+  staticWebStream.end(done);
 }
 
 function wrapUp(error, data) {
